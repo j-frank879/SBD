@@ -1,0 +1,8 @@
+create table SHIPPERS
+(
+    SHIPPER_ID   NUMBER(9),
+    COMPANY_NAME VARCHAR2(40),
+    PHONE        VARCHAR2(24)
+)
+/
+
