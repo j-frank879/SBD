@@ -12,10 +12,7 @@ import org.springframework.web.bind.annotation.*;
 @Controller
 public class UzytkownikController {
     private UzytkownikRepository uzytkownikRepository;
-    @Autowired
-    public UzytkownikController(UzytkownikRepository studentRepository) {
-        this.uzytkownikRepository = studentRepository;
-    }
+
     @GetMapping("/test")
     public String showTest() {
 
