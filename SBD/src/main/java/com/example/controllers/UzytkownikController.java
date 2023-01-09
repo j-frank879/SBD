@@ -1,4 +1,4 @@
-package com.example.SBD;
+package com.example.controllers;
 
 
 import com.example.repository.UzytkownikRepository;
