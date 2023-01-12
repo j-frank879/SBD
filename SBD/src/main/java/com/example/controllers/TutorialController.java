@@ -2,124 +2,113 @@ package com.example.controllers;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
-import com.example.models.Tutorial;
+import com.example.entity.Tutorial;
 import com.example.repository.TutorialRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.data.repository.query.Param;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 
 
-@CrossOrigin(origins = "http://localhost:8081")
-@RestController
-@RequestMapping("/api")
+@Controller
 public class TutorialController {
 
-    @Autowired
-    TutorialRepository tutorialRepository;
+  @Autowired
+  private TutorialRepository tutorialRepository;
 
-    @GetMapping("/tutorials")
-    public ResponseEntity<List<Tutorial>> getAllTutorials(@RequestParam(required = false) String title) {
-        try {
-            List<Tutorial> tutorials = new ArrayList<Tutorial>();
+  @GetMapping("/tutorials")
+  public String getAll(Model model, @Param("keyword") String keyword) {
+    try {
+      List<Tutorial> tutorials = new ArrayList<Tutorial>();
 
-            if (title == null)
-                tutorialRepository.findAll().forEach(tutorials::add);
-            else
-                tutorialRepository.findByTitleContaining(title).forEach(tutorials::add);
+      if (keyword == null) {
+        tutorialRepository.findAll().forEach(tutorials::add);
+      } else {
+        tutorialRepository.findByTitleContainingIgnoreCase(keyword).forEach(tutorials::add);
+        model.addAttribute("keyword", keyword);
+      }
 
-            if (tutorials.isEmpty()) {
-                return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-            }
-
-            return new ResponseEntity<>(tutorials, HttpStatus.OK);
-        } catch (Exception e) {
-            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
-        }
+      model.addAttribute("tutorials", tutorials);
+    } catch (Exception e) {
+      model.addAttribute("message", e.getMessage());
     }
 
-    @GetMapping("/tutorials/{id}")
-    public ResponseEntity<Tutorial> getTutorialById(@PathVariable("id") long id) {
-        Optional<Tutorial> tutorialData = tutorialRepository.findById(id);
+    return "tutorials";
+  }
 
-        if (tutorialData.isPresent()) {
-            return new ResponseEntity<>(tutorialData.get(), HttpStatus.OK);
-        } else {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
+  @GetMapping("/tutorials/new")
+  public String addTutorial(Model model) {
+    Tutorial tutorial = new Tutorial();
+    tutorial.setPublished(true);
+
+    model.addAttribute("tutorial", tutorial);
+    model.addAttribute("pageTitle", "Create new Tutorial");
+
+    return "tutorial_form";
+  }
+
+  @PostMapping("/tutorials/save")
+  public String saveTutorial(Tutorial tutorial, RedirectAttributes redirectAttributes) {
+    try {
+      tutorialRepository.save(tutorial);
+
+      redirectAttributes.addFlashAttribute("message", "The Tutorial has been saved successfully!");
+    } catch (Exception e) {
+      redirectAttributes.addAttribute("message", e.getMessage());
     }
 
-    @PostMapping("/tutorials")
-    public ResponseEntity<Tutorial> createTutorial(@RequestBody Tutorial tutorial) {
-        try {
-            Tutorial _tutorial = tutorialRepository
-                    .save(new Tutorial(tutorial.getTitle(), tutorial.getDescription(), false));
-            return new ResponseEntity<>(_tutorial, HttpStatus.CREATED);
-        } catch (Exception e) {
-            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
-        }
+    return "redirect:/tutorials";
+  }
+
+  @GetMapping("/tutorials/{id}")
+  public String editTutorial(@PathVariable("id") Integer id, Model model, RedirectAttributes redirectAttributes) {
+    try {
+      Tutorial tutorial = tutorialRepository.findById(id).get();
+
+      model.addAttribute("tutorial", tutorial);
+      model.addAttribute("pageTitle", "Edit Tutorial (ID: " + id + ")");
+
+      return "tutorial_form";
+    } catch (Exception e) {
+      redirectAttributes.addFlashAttribute("message", e.getMessage());
+
+      return "redirect:/tutorials";
+    }
+  }
+
+  @GetMapping("/tutorials/delete/{id}")
+  public String deleteTutorial(@PathVariable("id") Integer id, Model model, RedirectAttributes redirectAttributes) {
+    try {
+      tutorialRepository.deleteById(id);
+
+      redirectAttributes.addFlashAttribute("message", "The Tutorial with id=" + id + " has been deleted successfully!");
+    } catch (Exception e) {
+      redirectAttributes.addFlashAttribute("message", e.getMessage());
     }
 
-    @PutMapping("/tutorials/{id}")
-    public ResponseEntity<Tutorial> updateTutorial(@PathVariable("id") long id, @RequestBody Tutorial tutorial) {
-        Optional<Tutorial> tutorialData = tutorialRepository.findById(id);
+    return "redirect:/tutorials";
+  }
 
-        if (tutorialData.isPresent()) {
-            Tutorial _tutorial = tutorialData.get();
-            _tutorial.setTitle(tutorial.getTitle());
-            _tutorial.setDescription(tutorial.getDescription());
-            _tutorial.setPublished(tutorial.isPublished());
-            return new ResponseEntity<>(tutorialRepository.save(_tutorial), HttpStatus.OK);
-        } else {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
+  @GetMapping("/tutorials/{id}/published/{status}")
+  public String updateTutorialPublishedStatus(@PathVariable("id") Integer id, @PathVariable("status") boolean published,
+      Model model, RedirectAttributes redirectAttributes) {
+    try {
+      tutorialRepository.updatePublishedStatus(id, published);
+
+      String status = published ? "published" : "disabled";
+      String message = "The Tutorial id=" + id + " has been " + status;
+
+      redirectAttributes.addFlashAttribute("message", message);
+    } catch (Exception e) {
+      redirectAttributes.addFlashAttribute("message", e.getMessage());
     }
 
-    @DeleteMapping("/tutorials/{id}")
-    public ResponseEntity<HttpStatus> deleteTutorial(@PathVariable("id") long id) {
-        try {
-            tutorialRepository.deleteById(id);
-            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-        } catch (Exception e) {
-            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-        }
-    }
-
-    @DeleteMapping("/tutorials")
-    public ResponseEntity<HttpStatus> deleteAllTutorials() {
-        try {
-            tutorialRepository.deleteAll();
-            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-        } catch (Exception e) {
-            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-        }
-
-    }
-
-    @GetMapping("/tutorials/published")
-    public ResponseEntity<List<Tutorial>> findByPublished() {
-        try {
-            List<Tutorial> tutorials = tutorialRepository.findByPublished(true);
-
-            if (tutorials.isEmpty()) {
-                return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-            }
-            return new ResponseEntity<>(tutorials, HttpStatus.OK);
-        } catch (Exception e) {
-            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-        }
-    }
-
+    return "redirect:/tutorials";
+  }
 }

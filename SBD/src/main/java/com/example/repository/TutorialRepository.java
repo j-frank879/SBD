@@ -2,11 +2,22 @@ package com.example.repository;
 
 import java.util.List;
 
-import com.example.models.Tutorial;
+
+import com.example.entity.Tutorial;
+import javax.transaction.Transactional;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.stereotype.Repository;
 
 
-public interface TutorialRepository extends JpaRepository<Tutorial, Long> {
-    List<Tutorial> findByPublished(boolean published);
-    List<Tutorial> findByTitleContaining(String title);
+
+@Repository
+@Transactional
+public interface TutorialRepository extends JpaRepository<Tutorial, Integer> {
+  List<Tutorial> findByTitleContainingIgnoreCase(String keyword);
+
+  @Query("UPDATE Tutorial t SET t.published = :published WHERE t.id = :id")
+  @Modifying
+  public void updatePublishedStatus(Integer id, boolean published);
 }
