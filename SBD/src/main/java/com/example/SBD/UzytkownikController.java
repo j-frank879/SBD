@@ -24,6 +24,14 @@ public class UzytkownikController {
         return "uzytkownik";
     }
 
+    @GetMapping("/signup")
+    public String showSignup() {
+        return "add_uzytkownik";
+    }
 
+    @GetMapping("/edit")
+    public String showEdit() {
+        return "edit_uzytkownik";
+    }
 
 }
