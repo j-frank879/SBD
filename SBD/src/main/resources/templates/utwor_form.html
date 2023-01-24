@@ -30,7 +30,7 @@
         
         <div class="p-3">
           <div class="form-group row">
-            <label class="col-sm-3 col-form-label" for="title">Tytul</label>
+            <label class="col-sm-3 col-form-label" for="nazwa">Tytul</label>
             <div class="col-sm-9">
               <input type="text" th:field="*{nazwa}" required minlength="2" maxlength="128" class="form-control"
                 id="nazwa" />
@@ -38,7 +38,7 @@
           </div>
 
           <div class="form-group row">
-            <label class="col-sm-3 col-form-label" for="description">Opis</label>
+            <label class="col-sm-3 col-form-label" for="opis">Opis</label>
             <div class="col-sm-9">
               <input type="text" th:field="*{opis}" minlength="2" maxlength="256" class="form-control"
                 id="opis" />
@@ -46,7 +46,7 @@
           </div>
 
           <div class="form-group row">
-            <label class="col-sm-3 col-form-label" for="level">Plik</label>
+            <label class="col-sm-3 col-form-label" for="utwor">Plik</label>
             <div class="col-sm-9">
               <input type="file" step="1" th:field="*{utwor}" accept=".mp3"
                 class="form-control" id="utwor" />
@@ -54,7 +54,7 @@
           </div>
             
           <div class="form-group row">
-            <label class="col-sm-3 col-form-label" for="level">Nazwa Autora</label>
+            <label class="col-sm-3 col-form-label" for="nazwaAutora">Nazwa Autora</label>
             <div class="col-sm-9">
               <input type="text" step="1" th:field="*{nazwaAutora}" minlength="2"
                 class="form-control" id="nazwaAutora" />

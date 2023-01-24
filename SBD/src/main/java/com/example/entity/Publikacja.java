@@ -14,7 +14,7 @@ public abstract class Publikacja {
     private String nazwaAutora;
     
     public Publikacja()
-    {
+    {this.dataPrzeslania=new Date();
         
     }
     public Publikacja(String nazwa, Date dataPrzeslania, String nazwaAutora)
