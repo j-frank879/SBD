@@ -13,5 +13,5 @@ public class Uzytkownik implements  IUzytkownik
     String haslo;
     Boolean blokada;
     String email;
-    int rola; //Idk czy tak mialo byc
+    String rola; //Idk czy tak mialo byc
 }
