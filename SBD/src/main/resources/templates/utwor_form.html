@@ -13,46 +13,51 @@
 </head>
 
 <body>
+
   <div th:replace="fragments/header :: header"></div>
 
   <div class="container-fluid">
     <h2 class="text-center">[[${pageTitle}]]</h2>
 
     <div class="my-3">
-      <form th:action="@{/tutorials/save}" method="post" enctype="multipart/form-data" th:object="${tutorial}"
+      <form th:action="@{/utwory/save}" method="post" enctype="multipart/form-data" th:object="${utwor}"
         style="max-width: 550px; margin: 0 auto">
 
         <input type="hidden" th:field="*{id}" />
 
+        
+ 
+        
         <div class="p-3">
           <div class="form-group row">
-            <label class="col-sm-3 col-form-label" for="title">Title</label>
+            <label class="col-sm-3 col-form-label" for="title">Tytul</label>
             <div class="col-sm-9">
-              <input type="text" th:field="*{title}" required minlength="2" maxlength="128" class="form-control"
-                id="title" />
+              <input type="text" th:field="*{nazwa}" required minlength="2" maxlength="128" class="form-control"
+                id="nazwa" />
             </div>
           </div>
 
           <div class="form-group row">
-            <label class="col-sm-3 col-form-label" for="description">Description</label>
+            <label class="col-sm-3 col-form-label" for="description">Opis</label>
             <div class="col-sm-9">
-              <input type="text" th:field="*{description}" minlength="2" maxlength="256" class="form-control"
-                id="description" />
+              <input type="text" th:field="*{opis}" minlength="2" maxlength="256" class="form-control"
+                id="opis" />
             </div>
           </div>
 
           <div class="form-group row">
-            <label class="col-sm-3 col-form-label" for="level">Level</label>
+            <label class="col-sm-3 col-form-label" for="level">Plik</label>
             <div class="col-sm-9">
-              <input type="number" step="1" th:field="*{level}" required min="1"
-                class="form-control" id="level" />
+              <input type="file" step="1" th:field="*{utwor}" accept=".mp3"
+                class="form-control" id="utwor" />
             </div>
           </div>
-
+            
           <div class="form-group row">
-            <label class="col-sm-3 form-check-label" for="published">Published</label>
+            <label class="col-sm-3 col-form-label" for="level">Nazwa Autora</label>
             <div class="col-sm-9">
-              <input type="checkbox" th:field="*{published}" />
+              <input type="text" step="1" th:field="*{nazwaAutora}" minlength="2"
+                class="form-control" id="nazwaAutora" />
             </div>
           </div>
 
@@ -70,7 +75,7 @@
   <script type="text/javascript">
     $(document).ready(function () {
       $("#btnCancel").on("click", function () {
-        window.location = "[[@{/tutorials}]]";
+        window.location = "[[@{/utwory}]]";
       });
     });
   </script>

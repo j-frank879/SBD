@@ -1,16 +1,70 @@
 package com.example.entity;
 
+import java.io.Serializable;
+import java.util.Date;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Lob;
 
 @Entity
 public class Utwor extends Publikacja
 {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    Long id;
-    String opis;
+    private Long id;
+    @Column
+    private String opis;
+    @Lob
     byte[] utwor;
+    
+    
+    public Utwor()
+    {
+        this.setdataPrzeslania(new Date());
+    }
+    public Utwor(Long id, String opis, byte [] utwor,String nazwa,Date dataPrzeslania, String nazwaAutora)
+    {
+        this.id=id;
+        this.opis=opis;
+        this.utwor=utwor;
+        this.setNazwa(nazwa);
+        this.setdataPrzeslania(dataPrzeslania);
+        this.setnazwaAutora(nazwaAutora);
+        
+    }
+    public Long getId()
+    {
+        return id;
+    }
+    public String getOpis()
+    {
+       
+        return opis;
+    }
+    public byte[] getUtwor()
+    {
+        return utwor;
+    }
+    public void setId(Long id)
+    {
+        this.id=id;
+    }
+    public void setOpis(String opis)
+    {
+        this.opis=opis;
+    }
+    public void setUtwor(byte[] utwor)
+    {
+        this.utwor=utwor;
+        
+    }
+    public String toString()
+    {
+        return ("TEST  "+ opis);
+    }
+
+
 }
