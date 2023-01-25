@@ -5,6 +5,7 @@
 package com.example.controllers;
 import com.example.entity.Utwor;
 import com.example.repository.UtworRepository;
+import java.net.MalformedURLException;
 import java.util.ArrayList;
 import java.util.List;
 import javax.servlet.ServletException;
@@ -43,9 +44,11 @@ public class UtworController
         utworRepository.findByNazwaContainingIgnoreCase(keyword).forEach(utwory::add);
         model.addAttribute("keyword", keyword);
       }
+      
 
+      
       model.addAttribute("utwory", utwory);
-      System.out.println(utwory.toString());
+      
     } catch (Exception e) {
       model.addAttribute("message", e.getMessage());
     }
@@ -55,7 +58,7 @@ public class UtworController
   }
 
   @GetMapping("/utwory/new")
-  public String addUtwor(Model model) {
+  public String addUtwor(Model model) throws MalformedURLException {
     Utwor utwor = new Utwor();
     
     model.addAttribute("utwor", utwor);
@@ -76,7 +79,6 @@ public class UtworController
 
     return "redirect:/utwory";
   }
-
   @GetMapping("/utwory/{id}")
   public String editUtwor(@PathVariable("id") Long id, Model model, RedirectAttributes redirectAttributes) {
     try {
@@ -105,6 +107,8 @@ public class UtworController
 
     return "redirect:/utwory";
   }
+  
+  
     @InitBinder
     protected void initBinder(HttpServletRequest request, ServletRequestDataBinder binder)
         throws ServletException 

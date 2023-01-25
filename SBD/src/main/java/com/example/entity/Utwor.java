@@ -1,6 +1,8 @@
 package com.example.entity;
 
 import java.io.Serializable;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.Date;
 import javax.persistence.*;
 
@@ -17,10 +19,14 @@ public class Utwor extends Publikacja
     byte[] utwor;
     
     
-    public Utwor()
-    {super();
+    public Utwor() throws MalformedURLException
+    {   super();
+        
+        
+    
 
     }
+    
     public Utwor(Long id, String opis, byte [] utwor,String nazwa,Date dataPrzeslania, String nazwaAutora)
     {
         this.id=id;

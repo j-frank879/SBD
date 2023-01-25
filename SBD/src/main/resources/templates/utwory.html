@@ -57,15 +57,21 @@
             <th scope="col">Utwor</th>
             <th scope="col">Data Przeslania</th>
             <th scope="col">Nazwa Autora</th>
-            <th scope="col>"> Actions</th>
+            <th scope="col>">Czynnosci </th>
           </tr>
         </thead>
         <tbody>
           <tr th:each="utwor : ${utwory}">
-            <th scope="row">[[${utwor.getId()}]]</th>
+            <th scope="row">[[${utwor.id}]]</th>
             <td>[[${utwor.nazwa}]]</td>
             <td>[[${utwor.opis}]]</td>
-            <td>[[${utwor.utwor}]]</td>
+            <td>
+                <audio controls="controls">
+                    <source id ="testt" th:data1="${utwor.utwor}" th:attr="src=|fun(${utwor.utwor})|"  type="audio/mp3">    
+                </audio>
+                <button th:data1="${utwor.utwor}"th:onclick="javascript:fun(this.getAttribute('data1'));">
+                </button>
+            </td>
             <td>[[${utwor.getdataPrzeslania()}]]</td>
             <td>[[${utwor.getnazwaAutora()}]]</td>
             <td>
@@ -73,7 +79,7 @@
                 class="fa-regular fa-pen-to-square icon-dark"></a>
        
           &nbsp;
-          <a th:href="@{'/utwor/delete/' + ${utwor.id}}"  id="btnDelete"
+          <a th:href="@{'/utwory/delete/' + ${utwor.id}}"  th:utworNazwa="${utwor.nazwa}" id="btnDelete"
               class="fa-regular fa-trash-can icon-dark btn-delete"></a>
             
             </td>
@@ -91,7 +97,7 @@
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title">Delete Confirmation</h5>
+          <h5 class="modal-title">Potwierdzenie usuwania</h5>
           <button type="button" class="close" data-dismiss="modal">
             <span aria-hidden="true">&times;</span>
           </button>
@@ -112,17 +118,49 @@
   <div th:replace="fragments/footer :: footer"></div>
 
   <script type="text/javascript">
+
+          function fun(blob)
+    {
+       console.log(blob)
+       var blobTest = new Blob([blob], { type: "audio/mpeg" });
+       let url=window.URL.createObjectURL(blobTest)
+       console.log(url)
+       const audioTag = document.createElement("audio");
+audioTag.src = url;
+audioTag.play();
+       $("#testt").attr("src",url);
+       return(url);
+    }
     $(document).ready(function () {
+        
       $(".btn-delete").on("click", function (e) {
         e.preventDefault();
         link = $(this);
 
-        tutorialNazwa = link.attr("utworNazwa");
+        utworNazwa = link.attr("utworNazwa");
         $("#yesBtn").attr("href", link.attr("href"));
-        $("#confirmText").html("Do you want to delete the Utwor \<strong\>" + utworNazwa + "\<\/strong\>?");
+        $("#confirmText").html("Czy naprawde chcesz usunac Utwor \<strong\>" + utworNazwa + "\<\/strong\>?");
         $("#confirmModal").modal();
       });
 
+
+
+    function audioTest() 
+    {
+        $scope.player = new window.Audio();
+
+        var xhr = new XMLHttpRequest();
+        xhr.onreadystatechange = function() {
+            if (this.readyState == 4 && this.status == 200) {
+                $scope.player.src = window.URL.createObjectURL(this.response);
+                $scope.player.play();
+            }
+        };
+        xhr.open('GET', url);
+        xhr.responseType = 'blob';
+        xhr.send();
+    }
+    
       $("#btnClear").on("click", function (e) {
         e.preventDefault();
         $("#keyword").text("");
