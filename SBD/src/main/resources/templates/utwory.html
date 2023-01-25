@@ -66,7 +66,7 @@
             <td>[[${utwor.nazwa}]]</td>
             <td>[[${utwor.opis}]]</td>
             <td>
-                <audio controls="controls">
+                <audio controls="controls" >
                     <source id ="testt" th:data1="${utwor.utwor}" th:attr="src=|fun(${utwor.utwor})|"  type="audio/mp3">    
                 </audio>
                 <button th:data1="${utwor.utwor}"th:onclick="javascript:fun(this.getAttribute('data1'));">
