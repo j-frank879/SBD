@@ -1,9 +1,7 @@
 package com.example.controllers;
 
-import com.example.entity.Tutorial;
-import com.example.entity.Uzytkownik;
+
 import com.example.entity.Wiadomosc;
-import com.example.repository.UzytkownikRepository;
 import com.example.repository.WiadomoscRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.repository.query.Param;

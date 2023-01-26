@@ -1,6 +1,6 @@
 <header th:fragment="header">
   <nav class="navbar navbar-expand-md bg-dark navbar-dark">
-    <a class="navbar-brand" th:href="@{/tutorials}">
+    <a class="navbar-brand" >
       Serwis Muzyczny
     </a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#topNavbar">
@@ -8,12 +8,6 @@
     </button>
     <div class="collapse navbar-collapse" id="topNavbar">
       <ul class="navbar-nav">
-        <li class="nav-item">
-          <a class="nav-link" th:href="@{/tutorials}">Tutorials</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" th:href="@{/tutorials/new}">Add tutorial</a>
-        </li>
         <li class="nav-item">
           <a class="nav-link" th:href="@{/utwory}">Utwory</a>
         </li>
@@ -24,10 +18,10 @@
           <a class="nav-link" th:href="@{/wiadomosc}">Wiadomosc</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" th:href="@{/articles}">Articles</a>
+          <a class="nav-link" th:href="@{/articles}">Artykuły</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" th:href="@{/articleEditor}">new Article</a>
+          <a class="nav-link" th:href="@{/articleEditor}">Dodaj artykuł</a>
         </li>
       </ul>
     </div>

@@ -1,7 +1,6 @@
 package com.example.controllers;
 
 import com.example.entity.Uzytkownik;
-import com.example.repository.TutorialRepository;
 import com.example.repository.UzytkownikRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
