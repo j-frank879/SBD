@@ -4,6 +4,7 @@
  */
 package com.example.repository;
 
+import com.example.entity.Publikacja;
 import com.example.entity.Utwor;
 import java.util.List;
 import javax.transaction.Transactional;
@@ -20,5 +21,7 @@ import org.springframework.stereotype.Repository;
 public interface UtworRepository extends JpaRepository<Utwor, Long>
 {
   List<Utwor> findByNazwaContainingIgnoreCase(String keyword);
+
+   
 
 }

@@ -8,6 +8,12 @@ package com.example.entity;
  *
  * @author poker
  */
-public interface IUtwor {
-    
+public interface IUtwor 
+{ 
+    public Long getId();
+    public String getOpis();
+    public byte[] getUtwor();
+    public void setId(Long Id);
+    public void setOpis(String opis);
+    public void setUtwor(byte[] utwor);
 }

@@ -3,7 +3,9 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 package com.example.controllers;
+import com.example.entity.Publikacja;
 import com.example.entity.Utwor;
+import com.example.fabryka.UtworFabryka;
 import com.example.repository.UtworRepository;
 import java.net.MalformedURLException;
 import java.util.ArrayList;
@@ -31,11 +33,12 @@ public class UtworController
 {
   @Autowired
   private UtworRepository utworRepository;
+  private UtworFabryka fabrykaUtworow = new UtworFabryka();
 
   @GetMapping("/utwory")
   public String getAll(Model model, @Param("keyword") String keyword) {
     try {
-      List<Utwor> utwory = new ArrayList<Utwor>();
+      List<Publikacja> utwory = new ArrayList<Publikacja>();
 
       
       if (keyword == null) {
@@ -59,7 +62,8 @@ public class UtworController
 
   @GetMapping("/utwory/new")
   public String addUtwor(Model model) throws MalformedURLException {
-    Utwor utwor = new Utwor();
+    Publikacja utwor = fabrykaUtworow.createPublikacja();
+    
     
     model.addAttribute("utwor", utwor);
     model.addAttribute("pageTitle", "Dodaj nowy utwor");
@@ -82,7 +86,7 @@ public class UtworController
   @GetMapping("/utwory/{id}")
   public String editUtwor(@PathVariable("id") Long id, Model model, RedirectAttributes redirectAttributes) {
     try {
-      Utwor utwor = utworRepository.findById(id).get();
+      Publikacja utwor = utworRepository.findById(id).get();
 
       model.addAttribute("utwor", utwor);
       model.addAttribute("pageTitle", "Edytuj utwor (ID: " + id + ")");

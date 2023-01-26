@@ -36,12 +36,12 @@
             <div class="search">
               <i class="fa fa-search"></i>
               <input id="keyword" type="search" name="keyword" th:value="${keyword}" required class="form-control"
-                placeholder="Enter keyword">
-              <button type="submit" class="btn btn-secondary">Search</button>
+                placeholder="Szukaj po nazwie">
+              <button type="submit" class="btn btn-secondary">Szukaj</button>
             </div>
           </div>
           <div class="col-md-6 mt-2">
-            <button id="btnClear" class="btn btn-info">Clear</button>
+            <button id="btnClear" class="btn btn-info">Wyczyść</button>
           </div>
         </div>
       </form>
@@ -122,12 +122,15 @@
           function fun(blob)
     {
        console.log(blob)
-       var blobTest = new Blob([blob], { type: "audio/mpeg" });
-       let url=window.URL.createObjectURL(blobTest)
-       console.log(url)
+
+
+       var blobTest = new Blob([blob], { type: "audio/mp3" });
+       let url=URL.createObjectURL(blobTest)
        const audioTag = document.createElement("audio");
 audioTag.src = url;
+audioTag.load();
 audioTag.play();
+console.log(audioTag);
        $("#testt").attr("src",url);
        return(url);
     }

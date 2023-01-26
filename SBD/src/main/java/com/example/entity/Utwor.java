@@ -8,7 +8,7 @@ import javax.persistence.*;
 
 @Entity
 @Table(name = "utwor")
-public class Utwor extends Publikacja
+public class Utwor extends Publikacja implements IUtwor
 {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -20,11 +20,8 @@ public class Utwor extends Publikacja
     
     
     public Utwor() throws MalformedURLException
-    {   super();
-        
-        
-    
-
+    {   
+        super();
     }
     
     public Utwor(Long id, String opis, byte [] utwor,String nazwa,Date dataPrzeslania, String nazwaAutora)
@@ -63,10 +60,5 @@ public class Utwor extends Publikacja
         this.utwor=utwor;
         
     }
-    public String toString()
-    {
-        return ("TEST  "+ opis);
-    }
-
 
 }
