@@ -1,6 +1,7 @@
 package com.example.controllers;
 
 
+import com.example.entity.Publikacja;
 import com.example.entity.Wiadomosc;
 import com.example.repository.WiadomoscRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -75,7 +76,21 @@ private WiadomoscRepository wiadomoscRepository;
 
         return "redirect:/wiadomosc";
     }
+  @GetMapping("/wiadomosc/{id}")
+  public String editWiadomosc(@PathVariable("id") int id, Model model, RedirectAttributes redirectAttributes) {
+    try {
+      Wiadomosc wiadomosc = wiadomoscRepository.findById(id).get();
 
+      model.addAttribute("wiadomosc", wiadomosc);
+      model.addAttribute("pageTitle", "Edytuj wiadomosc (ID: " + id + ")");
+
+      return "napisz_wiadomosc";
+    } catch (Exception e) {
+      redirectAttributes.addFlashAttribute("message", e.getMessage());
+
+      return "redirect:/wiadomosc";
+    }
+  }
 
     @GetMapping("/wiadomosc/delete/{id}")
     public String deleteWiadomosc(@PathVariable("id") Integer id, Model model, RedirectAttributes redirectAttributes) {
