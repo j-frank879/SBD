@@ -16,4 +16,6 @@ import org.springframework.stereotype.Repository;
 @Transactional
 public interface WiadomoscRepository extends JpaRepository<Wiadomosc, Integer> {
     List<Wiadomosc> findByNazwaOdbiorcyContainingIgnoreCase(String keyword);
+
+    
 }

@@ -20,7 +20,7 @@
 
 <div class="container-fluid" style="max-width: 900px; margin: 0 auto;">
   <h2 class="text-center">Wiadomosci</h2>
-  <a class="text-center" href="/napisz_wiadomosc">Napisz wiadomosc</a>
+  
   <div th:if="${message != null}" class="alert alert-success alert-dismissible fade show text-center message"
        role="alert">
     [[${message}]]
@@ -68,6 +68,8 @@
         <td>[[${wiadomosc.tresc}]]</td>
 
         <td>
+                          <a th:href="@{'/wiadomosc/' + ${wiadomosc.id}}" title="Edytuj wiadomosc"
+                class="fa-regular fa-pen-to-square icon-dark"></a>
           &nbsp;
           <a th:href="@{'/wiadomosc/delete/' + ${wiadomosc.id}}"  id="btnDelete"
               class="fa-regular fa-trash-can icon-dark btn-delete"></a>
