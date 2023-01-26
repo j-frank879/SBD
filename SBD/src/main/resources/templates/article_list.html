@@ -71,6 +71,7 @@
                 <th scope="col">Id</th>
                 <th scope="col">Title</th>
                 <th scope="col">Content</th>
+                <th scope="col">Status</th>
                 <th scope="col">Actions</th>
             </tr>
             </thead>
@@ -78,7 +79,18 @@
             <tr th:each="article : ${articles}">
                 <th scope="row">[[${article.id}]]</th>
                 <td>[[${article.nazwa}]]</td>
-                <td>[[${#strings.toString(article.content)}]]</td>
+                <td>[[${article.content}]]</td>
+                <th:block th:switch="${article.state}">
+                    <td th:case="0">
+                        unpublished
+                    </td>
+                    <td th:case="1">
+                        published
+                    </td>
+                    <td th:case="2">
+                        archived
+                    </td>
+                </th:block>
                 <td>
                     <a th:href="@{'/articles/' + ${article.id}}" title="Edit this article"
                        class="fa-regular fa-pen-to-square icon-dark"></a>
@@ -117,8 +129,6 @@
         </div>
     </div>
 </div>
-
-<div th:replace="fragments/footer :: footer"></div>
 
 <script type="text/javascript">
     $(document).ready(function () {

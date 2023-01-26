@@ -7,13 +7,14 @@ public class Artykul extends Publikacja {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     Long id;
-    byte[] content;
+    int state;
+    String content;
 
     public Long getId() {
         return id;
     }
 
-    public byte[] getContent() {
+    public String getContent() {
         return content;
     }
 
@@ -21,12 +22,22 @@ public class Artykul extends Publikacja {
         this.id = id;
     }
 
-    public void setContent(byte[] content) {
+    public void setContent(String content) {
         this.content = content;
     }
 
-    enum state{
+    public int getState() {
+        return state;
+    }
+
+    public void setState(int state) {
+        this.state = state;
+    }
+
+
+    enum State{
         unpublished,
-        published
+        published,
+        archived
     }
 }

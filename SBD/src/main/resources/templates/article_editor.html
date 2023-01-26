@@ -58,6 +58,12 @@
                               th:field="*{content}" autocomplete="off"></textarea>
                 </div>
 
+                <label class="col-sm-3 form-check-label" for="state">Published</label>
+                <div class="col-sm-9">
+                    <input type='hidden' th:field="*{state}" value='0' name='state' id='state'>
+                    <input type="checkbox" name='state_checkbox' value='1' id='state_checkbox'/>
+                </div>
+
                 <button class="btn btn-primary" type="submit">Submit form</button>
             </form>
         </div>
@@ -72,6 +78,20 @@
 <script th:src="@{/assets/summernote/summernote-bs4.js}"></script>
 
 <script>
+$(document).ready(function () {
+      $("#state_checkbox").on("click", function (e) {
+        var checkbox = document.getElementById("state_checkbox");
+        var s = document.getElementById("state");
+        if (checkbox){
+            s.value = 1;
+        }
+        else{
+            s.value = 0;
+        }
+      });
+    });
+
+
 $('#content').summernote({
     height: 200
 });
