@@ -4,6 +4,7 @@ import com.example.entity.Artykul;
 import com.example.repository.ArtykulRepository;
 import org.apache.tomcat.util.http.fileupload.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -99,4 +100,9 @@ public class ArtykulController {
         InputStream is = new ByteArrayInputStream(product.getImage());
         IOUtils.copy(is, response.getOutputStream());
     }*/
+    @GetMapping("/articles/archive/{id}")
+    public String archive(@PathVariable("id") Long id){
+        artykulRepository.modifyState(id);
+        return "redirect:/articles";
+    }
 }

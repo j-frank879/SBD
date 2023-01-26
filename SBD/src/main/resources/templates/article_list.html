@@ -75,8 +75,14 @@
                     </td>
                 </th:block>
                 <td>
-                    <a th:href="@{'/articles/' + ${article.id}}" title="Edit this article"
-                       class="fa-regular fa-pen-to-square icon-dark"></a>
+                    <th:block th:switch="${article.state}">
+                        <div th:case="2"></div>
+                        <div th:case="*">
+                        <a th:href="@{'/articles/' + ${article.id}}" title="Edit this article"
+                           class="fa-regular fa-pen-to-square icon-dark"></a>
+                            <a th:href="@{'/articles/archive/' + ${article.id}}">archive</a>
+                        </div>
+                    </th:block>
                     &nbsp;
                     <a th:href="@{'/articles/delete/' + ${article.id}}" th:articlenazwa="${article.nazwa}" id="btnDelete"
                        title="Delete this article" class="fa-regular fa-trash-can icon-dark btn-delete"></a>
