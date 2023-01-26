@@ -63,8 +63,8 @@ public class ArtykulController {
 
     @GetMapping("/articleEditor")
     public String main(Model model) {
-        //model.addAttribute("artykul", new Artykul());
-        return "articles";
+        model.addAttribute("artykul", new Artykul());
+        return "article_editor";
     }
 
     @PostMapping("/articleEditor")
@@ -73,7 +73,7 @@ public class ArtykulController {
         artykulRepository.save(artykul);
         System.out.println(artykul.getId() + " " + artykul.getNazwa() + " " + artykul.getContent());
         System.out.println("save called");
-        return "article_editor";
+        return "redirect:/articles";
     }
 
     @GetMapping("/articles/delete/{id}")
