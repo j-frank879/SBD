@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Users page</title>
+</head>
+<body>
+
+    Lorem ipsum Form<br>
+    <form method="nazwa" th:object="${user}">
+        <label for="nazwa">Nazwa:</label>
+        <input type="text" id="nazwa" placeholder="Nazwa" autocomplete="off" class="form-control"
+               th:field="*{nazwa}"/>
+        <label for="haslo">Haslo:</label>
+        <input type="text" id="haslo" placeholder="Haslo" autocomplete="off" class="form-control"
+               th:field="*{haslo}"/>
+        <input type="checkbox" th:field="*{blokada}" />
+        <label for="email">Email:</label>
+        <input type="text" id="email" placeholder="Email" autocomplete="off" class="form-control"
+               th:field="*{email}"/>
+        <input type="number" step="1" th:field="*{rola}" required min="0"
+               class="form-control" id="rola" />
+
+        <button class="btn btn-primary" type="submit">Submit form</button>
+    </form>
+
+</body>
+</html>
