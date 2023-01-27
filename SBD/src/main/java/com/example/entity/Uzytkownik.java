@@ -9,9 +9,7 @@ import javax.persistence.Id;
 @Entity
 public class Uzytkownik implements  IUzytkownik
 {
-    @Id 
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
+    @Id
     @Column
     private String nazwa;
     @Column
@@ -22,6 +20,12 @@ public class Uzytkownik implements  IUzytkownik
     private String email;
     @Column
     private int rola; //Idk czy tak mialo byc
+
+    enum Rola{
+        admin,
+        user,
+        redactor
+    }
     
     public Uzytkownik()
     {
@@ -32,6 +36,45 @@ public class Uzytkownik implements  IUzytkownik
         // dodaj piosenke
         System.out.println("Udalo sie dodac!");
     }
-    
-    
+
+
+    public String getNazwa() {
+        return nazwa;
+    }
+
+    public void setNazwa(String nazwa) {
+        this.nazwa = nazwa;
+    }
+
+    public String getHaslo() {
+        return haslo;
+    }
+
+    public void setHaslo(String haslo) {
+        this.haslo = haslo;
+    }
+
+    public Boolean getBlokada() {
+        return blokada;
+    }
+
+    public void setBlokada(Boolean blokada) {
+        this.blokada = blokada;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public int getRola() {
+        return rola;
+    }
+
+    public void setRola(int rola) {
+        this.rola = rola;
+    }
 }

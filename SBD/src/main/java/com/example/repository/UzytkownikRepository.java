@@ -8,5 +8,5 @@ import javax.transaction.Transactional;
 
 @Repository
 @Transactional
-public interface UzytkownikRepository extends JpaRepository<Uzytkownik, Integer> {
+public interface UzytkownikRepository extends JpaRepository<Uzytkownik, String> {
 }
