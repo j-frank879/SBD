@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -27,8 +28,11 @@ public class ArtykulController {
     @Autowired
     private ArtykulRepository artykulRepository;
 
+    @GetMapping("/")
+    public String mainRedirect() {return "redirect:/articles";}
+
     @GetMapping("/articles")
-    public String getAll(Model model, @Param("keyword") String keyword) {
+    public String getAll(HttpSession session, Model model, @Param("keyword") String keyword) {
         try {
             List<Artykul> articles = new ArrayList<Artykul>();
 
@@ -40,6 +44,7 @@ public class ArtykulController {
             }
 
             model.addAttribute("articles", articles);
+            //model.addAttribute("session", session);
         } catch (Exception e) {
             model.addAttribute("message", e.getMessage());
         }
@@ -48,7 +53,7 @@ public class ArtykulController {
     }
 
     @GetMapping("/articles/{id}")
-    public String editArticle(@PathVariable("id") Long id, Model model) {
+    public String editArticle(@PathVariable("id") Long id, HttpSession session, Model model) {
         try {
             Optional<Artykul> article;
 
@@ -58,19 +63,22 @@ public class ArtykulController {
         } catch (Exception e) {
             model.addAttribute("message", e.getMessage());
         }
+        //model.addAttribute("session", session);
 
         return "article_editor";
     }
 
     @GetMapping("/articleEditor")
-    public String main(Model model) {
+    public String main(HttpSession session, Model model) {
         model.addAttribute("artykul", new Artykul());
+        //model.addAttribute("session", session);
         return "article_editor";
     }
 
     @PostMapping("/articleEditor")
-    public String save(Artykul artykul, Model model) {
+    public String save(HttpSession session, Artykul artykul, Model model) {
         model.addAttribute("artykul", artykul);
+        //model.addAttribute("session", session);
         artykulRepository.save(artykul);
         System.out.println(artykul.getId() + " " + artykul.getNazwa() + " " + artykul.getContent());
         System.out.println("save called");
@@ -78,7 +86,7 @@ public class ArtykulController {
     }
 
     @GetMapping("/articles/delete/{id}")
-    public String deleteTutorial(@PathVariable("id") Long id, Model model, RedirectAttributes redirectAttributes) {
+    public String deleteTutorial(@PathVariable("id") Long id, HttpSession session, Model model, RedirectAttributes redirectAttributes) {
         try {
             artykulRepository.deleteById(id);
 
@@ -86,6 +94,7 @@ public class ArtykulController {
         } catch (Exception e) {
             redirectAttributes.addFlashAttribute("message", e.getMessage());
         }
+        //model.addAttribute("session", session);
 
         return "redirect:/articles";
     }
@@ -101,8 +110,9 @@ public class ArtykulController {
         IOUtils.copy(is, response.getOutputStream());
     }*/
     @GetMapping("/articles/archive/{id}")
-    public String archive(@PathVariable("id") Long id){
+    public String archive(@PathVariable("id") Long id, HttpSession session, Model model){
         artykulRepository.modifyState(id);
+        //model.addAttribute("session", session);
         return "redirect:/articles";
     }
 }

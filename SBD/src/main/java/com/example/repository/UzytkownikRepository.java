@@ -9,4 +9,6 @@ import javax.transaction.Transactional;
 @Repository
 @Transactional
 public interface UzytkownikRepository extends JpaRepository<Uzytkownik, String> {
+    Uzytkownik findBynazwa(String nazwa);
+    void deleteBynazwa(String nazwa);
 }
