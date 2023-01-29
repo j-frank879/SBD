@@ -2,7 +2,9 @@ package com.example.controllers;
 
 
 import com.example.entity.Publikacja;
+import com.example.entity.Uzytkownik;
 import com.example.entity.Wiadomosc;
+import com.example.repository.UzytkownikRepository;
 import com.example.repository.WiadomoscRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.repository.query.Param;
@@ -13,6 +15,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,17 +23,19 @@ import java.util.List;
 public class WiadomoscController {
     @Autowired
 private WiadomoscRepository wiadomoscRepository;
-    //@Autowired
-   // private UzytkownikRepository uzytkownikRepository;
-
+    @Autowired
+    private UzytkownikRepository uzytkownikRepository;
     @GetMapping("/wiadomosc")
-    public String getAll(Model model, @Param("keyword") String keyword) {
+    public String getAll(HttpSession httpSession,Model model, @Param("keyword") String keyword) {
+        String username= (String) httpSession.getAttribute("username");
+        if(username==null)
+            return "redirect:/login";
         try {
             List<Wiadomosc> wiadomosci = new ArrayList<Wiadomosc>();
             if (keyword == null) {
-                wiadomoscRepository.findAll().forEach(wiadomosci::add);
+                wiadomoscRepository.findByNazwaOdbiorcyContainingIgnoreCase(username).forEach(wiadomosci::add);
             } else {
-                wiadomoscRepository.findByNazwaOdbiorcyContainingIgnoreCase(keyword).forEach(wiadomosci::add);
+                wiadomoscRepository.findByNazwaNadawcyAndNazwaOdbiorcyContainingIgnoreCase(keyword,username).forEach(wiadomosci::add);
                 model.addAttribute("keyword", keyword);
             }
             model.addAttribute("wiadomosci", wiadomosci);
@@ -42,31 +47,28 @@ private WiadomoscRepository wiadomoscRepository;
     }
 
     @GetMapping("/napisz_wiadomosc")
-    public String addWiadomosc(Model model) {
+    public String addWiadomosc(HttpSession httpSession,Model model) {
+        String username= (String) httpSession.getAttribute("username");
+        if(username==null)
+            return "redirect:/login";
         Wiadomosc wiadomosc = new Wiadomosc();
 
-
         model.addAttribute("wiadomosc", wiadomosc);
+
         model.addAttribute("pageTitle", "Napisz wiadomosc");
 
         return "napisz_wiadomosc";
     }
 
-    @PostMapping("/wiadomosc/new")
-    public String saveWiadomosc(Wiadomosc wiadomosc, RedirectAttributes redirectAttributes) {
-        try {
-            wiadomoscRepository.save(wiadomosc);
-
-            redirectAttributes.addFlashAttribute("message", "The Tutorial has been saved successfully!");
-        } catch (Exception e) {
-            redirectAttributes.addAttribute("message", e.getMessage());
-        }
-
-        return "redirect:/wiadomosc";
-    }
     @PostMapping("/wiadomosc/save")
-    public String saveTutorial(Wiadomosc wiadomosc, RedirectAttributes redirectAttributes) {
+    public String saveWiadomosc(Wiadomosc wiadomosc,HttpSession httpSession, RedirectAttributes redirectAttributes) {
+        String username=(String) httpSession.getAttribute("username");
+        Uzytkownik uzytkownik=uzytkownikRepository.findBynazwa(wiadomosc.getNazwaOdbiorcy());
+        if(uzytkownik==null)
+        {redirectAttributes.addFlashAttribute("message", "Nie ma użytkownika o podanej nazwie. Wiadomosc nie zostala wyslana.");
+        return "redirect:/napisz_wiadomosc";}
         try {
+            wiadomosc.setNazwaNadawcy(username);
             wiadomoscRepository.save(wiadomosc);
 
             redirectAttributes.addFlashAttribute("message", "Wiadomosc zostala wyslana");

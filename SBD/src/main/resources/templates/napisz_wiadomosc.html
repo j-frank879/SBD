@@ -4,7 +4,7 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0" />
-    <title>Add tutorial</title>
+    <title>Napisz wiadomosc</title>
 
     <link rel="stylesheet" type="text/css" th:href="@{/webjars/bootstrap/css/bootstrap.min.css}" />
     <link rel="stylesheet" type="text/css" th:href="@{/css/style.css}" />
@@ -14,7 +14,17 @@
 
 <body>
 <div th:replace="fragments/header :: header"></div>
-
+<div th:if="${message != null}" class="alert alert-error alert-dismissible fade show text-center message"
+     role="alert">
+    [[${message}]]
+    <button type="button" class="close btn-sm" data-dismiss="alert" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+    </button>
+</div>
+<br/>
+<br/>
+<br/>
+<br/>
 <div class="container-fluid">
     <div class="my-3">
         <form th:action="@{/wiadomosc/save}" method="post" enctype="multipart/form-data" th:object="${wiadomosc}"
@@ -22,14 +32,6 @@
 
             <input type="hidden" th:field="*{id}" />
 
-            <div class="p-3">
-                <div class="form-group row">
-                    <label class="col-sm-3 col-form-label" for="nazwaNadawcy">Nazwa nadawcy</label>
-                    <div class="col-sm-9">
-                        <input type="text" th:field="*{nazwaNadawcy}" required minlength="2" maxlength="30" class="form-control"
-                               id="nazwaNadawcy" />
-                    </div>
-                </div>
 
                 <div class="form-group row">
                     <label class="col-sm-3 col-form-label" for="nazwaOdbiorcy">Nazwa odbiorcy</label>
@@ -48,7 +50,7 @@
                 </div>
 
                 <div class="text-center">
-                    <input type="submit" value="Save" class="btn btn-primary btn-sm mr-2" />
+                    <input type="submit" value="Wyslij" class="btn btn-primary btn-sm mr-2" />
                     <input type="button" value="Cancel" id="btnCancel" class="btn btn-secondary btn-sm" />
                 </div>
             </div>
