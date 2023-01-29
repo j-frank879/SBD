@@ -8,13 +8,13 @@ public class Artykul extends Publikacja{
     @GeneratedValue(strategy = GenerationType.AUTO)
     Long id;
     int state;
-    String content;
+    byte[] content;
 
     public Long getId() {
         return id;
     }
 
-    public String getContent() {
+    public byte[] getContent() {
         return content;
     }
 
@@ -22,7 +22,7 @@ public class Artykul extends Publikacja{
         this.id = id;
     }
 
-    public void setContent(String content) {
+    public void setContent(byte[] content) {
         this.content = content;
     }
 

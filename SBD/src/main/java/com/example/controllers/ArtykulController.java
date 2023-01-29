@@ -1,5 +1,6 @@
 package com.example.controllers;
 
+import com.example.controllers.adapter.ArtykulAdapter;
 import com.example.entity.Artykul;
 import com.example.repository.ArtykulRepository;
 import org.apache.tomcat.util.http.fileupload.IOUtils;
@@ -35,12 +36,16 @@ public class ArtykulController {
     @GetMapping("/articles")
     public String getAll(HttpSession session, Model model, @Param("keyword") String keyword) {
         try {
-            List<Artykul> articles = new ArrayList<Artykul>();
+            List<ArtykulAdapter> articles = new ArrayList<ArtykulAdapter>();
 
             if (keyword == null) {
-                artykulRepository.findAll().forEach(articles::add);
+                artykulRepository.findAll().forEach((art) -> {
+                    articles.add(new ArtykulAdapter(art));
+                });
             } else {
-                artykulRepository.findBynazwaContainingIgnoreCase(keyword).forEach(articles::add);
+                artykulRepository.findBynazwaContainingIgnoreCase(keyword).forEach((art) -> {
+                    articles.add(new ArtykulAdapter(art));
+                });
                 model.addAttribute("keyword", keyword);
             }
 
@@ -60,7 +65,7 @@ public class ArtykulController {
 
             article = artykulRepository.findById(id);
 
-            model.addAttribute("artykul", article);
+            model.addAttribute("artykul", new ArtykulAdapter(article.get()));
         } catch (Exception e) {
             model.addAttribute("message", e.getMessage());
         }
@@ -80,7 +85,7 @@ public class ArtykulController {
     public String save(HttpSession session, Artykul artykul, Model model) {
         artykul.setnazwaAutora(session.getAttribute("username").toString());
         artykul.setdataPrzeslania(new Date());
-        model.addAttribute("artykul", artykul);
+        model.addAttribute("artykul", new ArtykulAdapter(artykul));
         //model.addAttribute("session", session);
         artykulRepository.save(artykul);
         System.out.println(artykul.getId() + " " + artykul.getNazwa() + " " + artykul.getContent());
