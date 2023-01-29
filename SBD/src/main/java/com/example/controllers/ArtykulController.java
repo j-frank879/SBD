@@ -19,6 +19,7 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -77,6 +78,8 @@ public class ArtykulController {
 
     @PostMapping("/articleEditor")
     public String save(HttpSession session, Artykul artykul, Model model) {
+        artykul.setnazwaAutora(session.getAttribute("username").toString());
+        artykul.setdataPrzeslania(new Date());
         model.addAttribute("artykul", artykul);
         //model.addAttribute("session", session);
         artykulRepository.save(artykul);

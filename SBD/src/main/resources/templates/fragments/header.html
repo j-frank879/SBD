@@ -23,9 +23,11 @@
         <li class="nav-item">
           <a class="nav-link" th:href="@{/articles}">Artykuły</a>
         </li>
+        <th:block th:if="${session.role} eq 0 or ${session.role} eq 1">
         <li class="nav-item">
           <a class="nav-link" th:href="@{/articleEditor}">Dodaj artykuł</a>
         </li>
+        </th:block>
         <th:block th:switch="${session.role}">
         <th:block th:case="null">
         <li class="nav-item">
