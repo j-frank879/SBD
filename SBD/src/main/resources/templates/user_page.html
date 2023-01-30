@@ -27,7 +27,96 @@
     <th:block th:if="${session.role} eq '2'">user</th:block>
     <th:block th:if="${session.role} eq '1'">redactor</th:block>
     <th:block th:if="${session.role} eq '0'">admin</th:block>
+    <p th:if="${session.role} eq '0' or ${session.role} eq '1'">
+        <div th:if="${articles.size() > 0}">
+            <table class="table table-hover table-responsive-xl">
+                <thead class="thead-light">
+                <tr>
+                    <th scope="col">Id</th>
+                    <th scope="col">Title</th>
+                    <th scope="col">Content</th>
+                    <th scope="col">Status</th>
+                    <th scope="col">Actions</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="article : ${articles}">
+                    <th scope="row">[[${article.id}]]</th>
+                    <td>[[${article.nazwa}]]</td>
+                    <td>[[${article.content}]]</td>
+                    <th:block th:switch="${article.state}">
+                        <td th:case="0">
+                            unpublished
+                        </td>
+                        <td th:case="1">
+                            published
+                        </td>
+                        <td th:case="2">
+                            archived
+                        </td>
+                    </th:block>
+                    <td>
+                        <th:block th:if="${session.role} eq 0 or ${session.role} eq 1">
+                            <th:block th:switch="${article.state}">
+                                <th:block th:case="2"></th:block>
+                                <th:block th:case="*">
+                                    <a th:href="@{'/articles/' + ${article.id}}" title="Edit this article"
+                                       class="fa-regular fa-pen-to-square icon-dark"></a>
+                                    <a th:href="@{'/articles/archive/' + ${article.id}}">archive</a>
+                                </th:block>
+                            </th:block>
+                            &nbsp;
+                            <a th:href="@{'/articles/delete/' + ${article.id}}" th:articlenazwa="${article.nazwa}" id="btnDelete"
+                               title="Delete this article" class="fa-regular fa-trash-can icon-dark btn-delete"></a>
+                        </th:block>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="" th:unless="${articles.size() > 0}">
+            <span>No articles found!</span>
+        </div>
+        <div class="modal fade text-center" id="confirmModal">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Delete Confirmation</h5>
+                        <button type="button" class="close" data-dismiss="modal">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+
+                    <div class="modal-body">
+                        <span id="confirmText"></span>
+                    </div>
+
+                    <div class="modal-footer">
+                        <a type="button" id="yesBtn" class="btn btn-danger">Yes</a>
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">No</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        </div>
+    </p>
 </p>
 
+
+
+<script type="text/javascript">
+    $(document).ready(function () {
+      $(".btn-delete").on("click", function (e) {
+        e.preventDefault();
+        link = $(this);
+
+        articlenazwa = link.attr("articlenazwa");
+        $("#yesBtn").attr("href", link.attr("href"));
+        $("#confirmText").html("Do you want to delete the Article \<strong\>" + articlenazwa + "\<\/strong\>?");
+        $("#confirmModal").modal();
+      });
+    });
+  </script>
 </body>
 </html>

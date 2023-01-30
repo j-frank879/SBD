@@ -1,6 +1,8 @@
 package com.example.controllers;
 
+import com.example.controllers.adapter.ArtykulAdapter;
 import com.example.entity.Uzytkownik;
+import com.example.repository.ArtykulRepository;
 import com.example.repository.UzytkownikRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
@@ -12,6 +14,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.servlet.http.HttpSession;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 @Controller
@@ -19,6 +23,8 @@ public class UzytkownikController
 {
     @Autowired
     private UzytkownikRepository uzytkownikRepository;
+    @Autowired
+    private ArtykulRepository artykulRepository;
 
     @GetMapping("/signup")
     public String signUp(HttpSession httpSession, Model model) {
@@ -67,9 +73,18 @@ public class UzytkownikController
     }
 
     @GetMapping("/user_page")
-    public String userPage(HttpSession httpSession)
+    public String userPage(HttpSession httpSession, Model model)
     {
-        return ("user_page");
+        if(httpSession.getAttribute("username") != null){
+            List<ArtykulAdapter> articles = new ArrayList<ArtykulAdapter>();
+            artykulRepository.findBynazwaAutora(httpSession.getAttribute("username").toString()).forEach((art) -> {
+            articles.add(new ArtykulAdapter(art));
+            });
+//            artykulRepository.findBynazwa(httpSession.getAttribute("username").toString());
+            model.addAttribute("articles", articles);
+            return ("user_page");}
+        else
+            return ("redirect:/articles");
     }
 
     @EventListener(ApplicationReadyEvent.class)
