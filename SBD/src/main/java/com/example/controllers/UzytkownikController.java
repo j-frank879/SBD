@@ -66,6 +66,12 @@ public class UzytkownikController
         return ("redirect:/articles");
     }
 
+    @GetMapping("/user_page")
+    public String userPage(HttpSession httpSession)
+    {
+        return ("user_page");
+    }
+
     @EventListener(ApplicationReadyEvent.class)
     public void createAdmin()
     {
