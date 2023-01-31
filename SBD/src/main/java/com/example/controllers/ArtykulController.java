@@ -1,6 +1,8 @@
 package com.example.controllers;
 
 import com.example.controllers.adapter.ArtykulAdapter;
+import com.example.controllers.iterator.BackwardIterator;
+import com.example.controllers.iterator.ForwardIterator;
 import com.example.entity.Artykul;
 import com.example.entity.Notification;
 import com.example.entity.UzytkSledz;
@@ -23,10 +25,7 @@ import javax.servlet.http.HttpSession;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Controller
 public class ArtykulController {
@@ -134,10 +133,31 @@ public class ArtykulController {
         return "redirect:/articles";
     }
     public void SendNotifications(String sender, String text) {
-        List<UzytkSledz> subs = uzytkSledzRepository.findAllByuzytkownikSledzony(sender);
-        System.out.println(subs.size());
-        subs.forEach((sub) -> {
-            notificationRepository.save(new Notification(text,sender,sub.getNazwaUzytkownika()));
-        });
+        Iterator<UzytkSledz> iterator = subscriptionIterator(uzytkSledzRepository.findAllByuzytkownikSledzony(sender)) ;
+        while(iterator.hasNext()){
+            notificationRepository.save(new Notification(text,sender,iterator.next().getNazwaUzytkownika()));
+        }
+    }
+
+    public Iterator<Artykul> artykulIterator () {
+        Random rnd = new Random();
+        switch (rnd.nextInt(2)) {
+            case 0:
+                return new ForwardIterator<Artykul>(artykulRepository.findAll());
+            case 1:
+                return new BackwardIterator<Artykul>(artykulRepository.findAll());
+        }
+        return null;
+    }
+
+    public Iterator<UzytkSledz> subscriptionIterator (List<UzytkSledz> list) {
+        Random rnd = new Random();
+        switch (rnd.nextInt(2)) {
+            case 0:
+                return new ForwardIterator<UzytkSledz>(list);
+            case 1:
+                return new BackwardIterator<UzytkSledz>(list);
+        }
+        return null;
     }
 }
