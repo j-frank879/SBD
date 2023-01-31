@@ -32,9 +32,8 @@ public class Uzytkownik implements  IUzytkownik
         
     }
     @Override
-    public void dodajPiosenke() {
-        // dodaj piosenke
-        System.out.println("Udalo sie dodac!");
+    public boolean dodajPiosenke() {
+        return true;
     }
 
 

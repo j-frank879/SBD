@@ -21,6 +21,7 @@ import org.springframework.stereotype.Repository;
 public interface UtworRepository extends JpaRepository<Utwor, Long>
 {
   List<Utwor> findByNazwaContainingIgnoreCase(String keyword);
+  List<Utwor> findByNazwaAutora(String keyword);
 
    
 

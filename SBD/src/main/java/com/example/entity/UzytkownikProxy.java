@@ -15,16 +15,22 @@ import java.util.Date;
 public class UzytkownikProxy implements IUzytkownik
 {
     private Uzytkownik uzytkownik;
-    private int licznikDzienny;
+    private int licznikDzienny=0;
     private Date dataPierwszegoDodania;
     
     public UzytkownikProxy()
     {
         this.uzytkownik= new Uzytkownik();
-        this.licznikDzienny=0;
+        
     }
+    public UzytkownikProxy(Uzytkownik uzytkownik)
+    {
+        this.uzytkownik= uzytkownik;
+        
+    }
+    
     @Override
-    public void dodajPiosenke() 
+    public boolean dodajPiosenke() 
     {
         Date dataAktualna = new Date();
         if(licznikDzienny==0)
@@ -45,7 +51,9 @@ public class UzytkownikProxy implements IUzytkownik
         else
         {
             System.out.println("BLOKADA! Dodales juz za duzo piosenek!");
+            return false;
         }
+        return true;
         
     }
     

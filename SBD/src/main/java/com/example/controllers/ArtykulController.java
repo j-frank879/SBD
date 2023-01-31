@@ -2,6 +2,8 @@ package com.example.controllers;
 
 import com.example.controllers.adapter.ArtykulAdapter;
 import com.example.entity.Artykul;
+import com.example.entity.Publikacja;
+import com.example.fabryka.ArtykulFabryka;
 import com.example.repository.ArtykulRepository;
 import org.apache.tomcat.util.http.fileupload.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,6 +31,7 @@ public class ArtykulController {
 
     @Autowired
     private ArtykulRepository artykulRepository;
+    private ArtykulFabryka fabrykaArtykulow = new ArtykulFabryka();
 
     @GetMapping("/")
     public String mainRedirect() {return "redirect:/articles";}
@@ -61,11 +64,10 @@ public class ArtykulController {
     @GetMapping("/articles/{id}")
     public String editArticle(@PathVariable("id") Long id, HttpSession session, Model model) {
         try {
-            Optional<Artykul> article;
-
-            article = artykulRepository.findById(id);
-
-            model.addAttribute("artykul", new ArtykulAdapter(article.get()));
+            
+            Publikacja article = artykulRepository.findById(id).get();
+            
+            model.addAttribute("artykul", new ArtykulAdapter((Artykul) article));
         } catch (Exception e) {
             model.addAttribute("message", e.getMessage());
         }
@@ -76,7 +78,7 @@ public class ArtykulController {
 
     @GetMapping("/articleEditor")
     public String main(HttpSession session, Model model) {
-        model.addAttribute("artykul", new Artykul());
+        model.addAttribute("artykul", fabrykaArtykulow.createPublikacja());
         //model.addAttribute("session", session);
         return "article_editor";
     }

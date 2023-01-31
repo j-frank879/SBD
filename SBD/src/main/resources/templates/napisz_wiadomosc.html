@@ -14,6 +14,7 @@
 
 <body>
 <div th:replace="fragments/header :: header"></div>
+<h2 class="text-center">[[${pageTitle}]]</h2>
 <div th:if="${message != null}" class="alert alert-error alert-dismissible fade show text-center message"
      role="alert">
     [[${message}]]
@@ -21,10 +22,7 @@
         <span aria-hidden="true">&times;</span>
     </button>
 </div>
-<br/>
-<br/>
-<br/>
-<br/>
+
 <div class="container-fluid">
     <div class="my-3">
         <form th:action="@{/wiadomosc/save}" method="post" enctype="multipart/form-data" th:object="${wiadomosc}"

@@ -28,6 +28,7 @@ private WiadomoscRepository wiadomoscRepository;
     @GetMapping("/wiadomosc")
     public String getAll(HttpSession httpSession,Model model, @Param("keyword") String keyword) {
         String username= (String) httpSession.getAttribute("username");
+        System.out.println(username);
         if(username==null)
             return "redirect:/login";
         try {
