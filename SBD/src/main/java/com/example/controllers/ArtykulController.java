@@ -2,6 +2,7 @@ package com.example.controllers;
 
 import com.example.controllers.adapter.ArtykulAdapter;
 import com.example.entity.Artykul;
+import com.example.entity.Uzytkownik;
 import com.example.entity.Publikacja;
 import com.example.fabryka.ArtykulFabryka;
 import com.example.repository.ArtykulRepository;
@@ -85,26 +86,30 @@ public class ArtykulController {
 
     @PostMapping("/articleEditor")
     public String save(HttpSession session, Artykul artykul, Model model) {
-        artykul.setnazwaAutora(session.getAttribute("username").toString());
-        artykul.setdataPrzeslania(new Date());
-        model.addAttribute("artykul", new ArtykulAdapter(artykul));
-        //model.addAttribute("session", session);
-        artykulRepository.save(artykul);
-        System.out.println(artykul.getId() + " " + artykul.getNazwa() + " " + artykul.getContent());
-        System.out.println("save called");
+        if ((Integer)session.getAttribute("role") < 2) {
+            artykul.setnazwaAutora(session.getAttribute("username").toString());
+            artykul.setdataPrzeslania(new Date());
+            model.addAttribute("artykul", new ArtykulAdapter(artykul));
+            //model.addAttribute("session", session);
+            artykulRepository.save(artykul);
+            System.out.println(artykul.getId() + " " + artykul.getNazwa() + " " + artykul.getContent());
+            System.out.println("save called");
+        }
         return "redirect:/articles";
     }
 
     @GetMapping("/articles/delete/{id}")
     public String deleteTutorial(@PathVariable("id") Long id, HttpSession session, Model model, RedirectAttributes redirectAttributes) {
-        try {
-            artykulRepository.deleteById(id);
+        if ((Integer)session.getAttribute("role") == 0 || artykulRepository.findnazwaAutoraById(id).toString().equals(session.getAttribute("username"))) {
+            try {
+                artykulRepository.deleteById(id);
 
-            redirectAttributes.addFlashAttribute("message", "The Article with id=" + id + " has been deleted successfully!");
-        } catch (Exception e) {
-            redirectAttributes.addFlashAttribute("message", e.getMessage());
+                redirectAttributes.addFlashAttribute("message", "The Article with id=" + id + " has been deleted successfully!");
+            } catch (Exception e) {
+                redirectAttributes.addFlashAttribute("message", e.getMessage());
+            }
+            //model.addAttribute("session", session);
         }
-        //model.addAttribute("session", session);
 
         return "redirect:/articles";
     }

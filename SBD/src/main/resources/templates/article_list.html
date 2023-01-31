@@ -79,14 +79,18 @@
                     <th:block th:switch="${article.state}">
                         <th:block th:case="2"></th:block>
                         <th:block th:case="*">
-                        <a th:href="@{'/articles/' + ${article.id}}" title="Edit this article"
-                           class="fa-regular fa-pen-to-square icon-dark"></a>
-                            <a th:href="@{'/articles/archive/' + ${article.id}}">archive</a>
+                            <th:block th:if="${session.username} eq ${article.getnazwaAutora()} or ${session.role} eq 0">
+                            <a th:href="@{'/articles/' + ${article.id}}" title="Edit this article"
+                               class="fa-regular fa-pen-to-square icon-dark"></a>
+                                <a th:href="@{'/articles/archive/' + ${article.id}}">archive</a>
+                            </th:block>
                         </th:block>
                     </th:block>
                     &nbsp;
-                    <a th:href="@{'/articles/delete/' + ${article.id}}" th:articlenazwa="${article.nazwa}" id="btnDelete"
-                       title="Delete this article" class="fa-regular fa-trash-can icon-dark btn-delete"></a>
+                    <th:block th:if="${session.username} eq ${article.getnazwaAutora()} or ${session.role} eq 0">
+                        <a th:href="@{'/articles/delete/' + ${article.id}}" th:articlenazwa="${article.nazwa}" id="btnDelete"
+                           title="Delete this article" class="fa-regular fa-trash-can icon-dark btn-delete"></a>
+                    </th:block>
                     </th:block>
                 </td>
             </tr>
