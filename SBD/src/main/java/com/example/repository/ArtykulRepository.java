@@ -17,6 +17,8 @@ public interface ArtykulRepository extends JpaRepository<Artykul, Long>
     List<Artykul> findBynazwa(String nazwa);
     List<Artykul> findBynazwaContainingIgnoreCase(String nazwa);
     List<Artykul> findBynazwaAutora(String nazwa);
+    @Query("SELECT a.nazwaAutora FROM Artykul a WHERE a.id=:id")
+    String findnazwaAutoraById(Long id);
     @Modifying
     @Query("UPDATE Artykul a SET state=2 where a.id=:id")
     void modifyState(Long id);
