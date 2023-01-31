@@ -1,4 +1,4 @@
-package com.example.controllers.adapter;
+package com.example.controllers;
 
 
 import com.example.entity.Uzytkownik;

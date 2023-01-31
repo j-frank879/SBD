@@ -3,13 +3,18 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 package com.example.controllers;
+import com.example.controllers.iterator.BackwardIterator;
+import com.example.controllers.iterator.ForwardIterator;
+import com.example.entity.Artykul;
 import com.example.entity.Publikacja;
 import com.example.entity.Utwor;
 import com.example.fabryka.UtworFabryka;
 import com.example.repository.UtworRepository;
 import java.net.MalformedURLException;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Random;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -122,6 +127,14 @@ public class UtworController
         binder.registerCustomEditor(byte[].class, new ByteArrayMultipartFileEditor());
 
     }
-
-    
+  public Iterator<Utwor> iterator () {
+    Random rnd = new Random();
+    switch (rnd.nextInt(2)) {
+      case 0:
+        return new ForwardIterator<Utwor>(utworRepository.findAll());
+      case 1:
+        return new BackwardIterator<Utwor>(utworRepository.findAll());
+    }
+    return null;
+  }
 }
