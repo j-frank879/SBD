@@ -18,7 +18,7 @@ public class Notification
     @Column
     private Date dataWyslania;
     @Column(length=150)
-    private String tresc;
+    public String tresc;
     @Column(length=30)
     private String nazwaNadawcy;
     @Column(length=30)

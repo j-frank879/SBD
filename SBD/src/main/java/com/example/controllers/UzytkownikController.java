@@ -110,7 +110,7 @@ public class UzytkownikController
             articles.add(new ArtykulAdapter(art));
             });
             model.addAttribute("articles", articles);
-//            model.addAttribute("notifications", notificationRepository.findAllBynazwaOdbiorcy(httpSession.getAttribute("username").toString()));
+            model.addAttribute("notifications", notificationRepository.findAllBynazwaOdbiorcy(httpSession.getAttribute("username").toString()));
             return ("user_page");}
         else
             return ("redirect:/articles");
