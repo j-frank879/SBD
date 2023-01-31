@@ -3,6 +3,7 @@ package com.example.controllers.adapter;
 
 import com.example.entity.Uzytkownik;
 import com.example.entity.Wiadomosc;
+import com.example.repository.NotificationRepository;
 import com.example.repository.UzytkownikRepository;
 import com.example.repository.WiadomoscRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,7 +22,7 @@ import java.util.List;
 @Controller
 public class NotificationController {
     @Autowired
-    private WiadomoscRepository notificationRepository;
+    private NotificationRepository notificationRepository;
     @Autowired
     private UzytkownikRepository uzytkownikRepository;
 
