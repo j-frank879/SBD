@@ -50,7 +50,7 @@ public class UzytkownikProxy implements IUzytkownik
         }
         else
         {
-            System.out.println("BLOKADA! Dodales juz za duzo piosenek!");
+            //System.out.println("BLOKADA! Dodales juz za duzo piosenek!");
             return false;
         }
         return true;
