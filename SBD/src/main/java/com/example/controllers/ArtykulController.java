@@ -2,8 +2,11 @@ package com.example.controllers;
 
 import com.example.controllers.adapter.ArtykulAdapter;
 import com.example.entity.Artykul;
-import com.example.entity.Uzytkownik;
+import com.example.entity.Notification;
+import com.example.entity.UzytkSledz;
 import com.example.repository.ArtykulRepository;
+import com.example.repository.NotificationRepository;
+import com.example.repository.UzytkSledzRepository;
 import org.apache.tomcat.util.http.fileupload.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.repository.Query;
@@ -30,7 +33,10 @@ public class ArtykulController {
 
     @Autowired
     private ArtykulRepository artykulRepository;
-
+    @Autowired
+    private NotificationRepository notificationRepository;
+    @Autowired
+    private UzytkSledzRepository uzytkSledzRepository;
     @GetMapping("/")
     public String mainRedirect() {return "redirect:/articles";}
 
@@ -90,6 +96,7 @@ public class ArtykulController {
             model.addAttribute("artykul", new ArtykulAdapter(artykul));
             //model.addAttribute("session", session);
             artykulRepository.save(artykul);
+            SendNotifications(session.getAttribute("username").toString(), "Użytnik "+session.getAttribute("username").toString()+" wstawił artykuł.");
             System.out.println(artykul.getId() + " " + artykul.getNazwa() + " " + artykul.getContent());
             System.out.println("save called");
         }
@@ -98,16 +105,14 @@ public class ArtykulController {
 
     @GetMapping("/articles/delete/{id}")
     public String deleteTutorial(@PathVariable("id") Long id, HttpSession session, Model model, RedirectAttributes redirectAttributes) {
-        if ((Integer)session.getAttribute("role") == 0 || artykulRepository.findnazwaAutoraById(id).toString().equals(session.getAttribute("username"))) {
-            try {
-                artykulRepository.deleteById(id);
+        try {
+            artykulRepository.deleteById(id);
 
-                redirectAttributes.addFlashAttribute("message", "The Article with id=" + id + " has been deleted successfully!");
-            } catch (Exception e) {
-                redirectAttributes.addFlashAttribute("message", e.getMessage());
-            }
-            //model.addAttribute("session", session);
+            redirectAttributes.addFlashAttribute("message", "The Article with id=" + id + " has been deleted successfully!");
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("message", e.getMessage());
         }
+        //model.addAttribute("session", session);
 
         return "redirect:/articles";
     }
@@ -127,5 +132,12 @@ public class ArtykulController {
         artykulRepository.modifyState(id);
         //model.addAttribute("session", session);
         return "redirect:/articles";
+    }
+    public void SendNotifications(String sender, String text) {
+        List<UzytkSledz> subs = uzytkSledzRepository.findAllByuzytkownikSledzony(sender);
+        System.out.println(subs.size());
+        subs.forEach((sub) -> {
+            notificationRepository.save(new Notification(text,sender,sub.getNazwaUzytkownika()));
+        });
     }
 }

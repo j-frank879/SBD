@@ -1,8 +1,12 @@
 package com.example.controllers;
 
 import com.example.controllers.adapter.ArtykulAdapter;
+import com.example.entity.Notification;
+import com.example.entity.UzytkSledz;
 import com.example.entity.Uzytkownik;
 import com.example.repository.ArtykulRepository;
+import com.example.repository.NotificationRepository;
+import com.example.repository.UzytkSledzRepository;
 import com.example.repository.UzytkownikRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
@@ -10,6 +14,7 @@ import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -25,6 +30,30 @@ public class UzytkownikController
     private UzytkownikRepository uzytkownikRepository;
     @Autowired
     private ArtykulRepository artykulRepository;
+    @Autowired
+    private UzytkSledzRepository uzytkSledzRepository;
+    @Autowired
+    private NotificationRepository notificationRepository;
+    @GetMapping("/add_subscription/{nazwa}")
+    public String AddSubscription(@PathVariable("nazwa")String nazwa, HttpSession httpSession) {
+        UzytkSledz uzytkSledz = new UzytkSledz();
+        uzytkSledz.setNazwaUzytkownika(httpSession.getAttribute("username").toString());
+        uzytkSledz.setUzytkownikSledzony(nazwa);
+        uzytkSledzRepository.save(uzytkSledz);
+        return("redirect:/articles");
+    }
+
+    @GetMapping("/user_list")
+    public String UserList(HttpSession session, Model model) {
+        try {
+            List<Uzytkownik> users = uzytkownikRepository.findAll();
+
+            model.addAttribute("users", users);
+        } catch (Exception e) {
+            model.addAttribute("message", e.getMessage());
+        }
+        return("user_list");
+    }
 
     @GetMapping("/signup")
     public String signUp(HttpSession httpSession, Model model) {
@@ -80,8 +109,8 @@ public class UzytkownikController
             artykulRepository.findBynazwaAutora(httpSession.getAttribute("username").toString()).forEach((art) -> {
             articles.add(new ArtykulAdapter(art));
             });
-//            artykulRepository.findBynazwa(httpSession.getAttribute("username").toString());
             model.addAttribute("articles", articles);
+            model.addAttribute("notifications", notificationRepository.findAllBynazwaOdbiorcy(httpSession.getAttribute("username").toString()));
             return ("user_page");}
         else
             return ("redirect:/articles");
