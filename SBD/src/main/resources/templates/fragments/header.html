@@ -11,15 +11,21 @@
         <li class="nav-item">
           <a class="nav-link" th:href="@{/utwory}">Utwory</a>
         </li>
+        <th:block th:if="${session.role} eq 0 or ${session.role} eq 1 or ${session.role} eq 2">
         <li class="nav-item">
           <a class="nav-link" th:href="@{/utwory/new}">Dodaj utwór</a>
         </li>
+        </th:block>
+        <th:block th:if="${session.role} eq 0 or ${session.role} eq 1 or ${session.role} eq 2">
         <li class="nav-item">
           <a class="nav-link" th:href="@{/wiadomosc}">Wiadomości</a>
         </li>
-             <li class="nav-item">
+        </th:block>
+         <th:block th:if="${session.role} eq 0 or ${session.role} eq 1 or ${session.role} eq 2">
+        <li class="nav-item">
           <a class="nav-link" th:href="@{/napisz_wiadomosc}">Dodaj wiadomość</a>
         </li>
+        </th:block>
         <li class="nav-item">
           <a class="nav-link" th:href="@{/articles}">Artykuły</a>
         </li>

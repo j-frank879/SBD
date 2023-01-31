@@ -6,6 +6,8 @@ package com.example.fabryka;
 
 import com.example.entity.Artykul;
 import com.example.entity.Publikacja;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
@@ -13,11 +15,11 @@ import com.example.entity.Publikacja;
  */
 public class ArtykulFabryka implements PublikacjaFabryka
 {
-
     @Override
     public Publikacja createPublikacja()
     {
         Artykul artykul = new Artykul();
+        
         return artykul;
     }
     

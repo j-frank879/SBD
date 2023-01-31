@@ -4,6 +4,9 @@ import com.example.controllers.adapter.ArtykulAdapter;
 import com.example.controllers.iterator.BackwardIterator;
 import com.example.controllers.iterator.ForwardIterator;
 import com.example.entity.Artykul;
+import com.example.entity.Uzytkownik;
+import com.example.entity.Publikacja;
+import com.example.fabryka.ArtykulFabryka;
 import com.example.entity.Notification;
 import com.example.entity.UzytkSledz;
 import com.example.repository.ArtykulRepository;
@@ -36,6 +39,8 @@ public class ArtykulController {
     private NotificationRepository notificationRepository;
     @Autowired
     private UzytkSledzRepository uzytkSledzRepository;
+    private ArtykulFabryka fabrykaArtykulow = new ArtykulFabryka();
+
     @GetMapping("/")
     public String mainRedirect() {return "redirect:/articles";}
 
@@ -82,7 +87,7 @@ public class ArtykulController {
 
     @GetMapping("/articleEditor")
     public String main(HttpSession session, Model model) {
-        model.addAttribute("artykul", new Artykul());
+        model.addAttribute("artykul", fabrykaArtykulow.createPublikacja());
         //model.addAttribute("session", session);
         return "article_editor";
     }
@@ -104,14 +109,16 @@ public class ArtykulController {
 
     @GetMapping("/articles/delete/{id}")
     public String deleteTutorial(@PathVariable("id") Long id, HttpSession session, Model model, RedirectAttributes redirectAttributes) {
-        try {
-            artykulRepository.deleteById(id);
+        if ((Integer)session.getAttribute("role") == 0 || artykulRepository.findnazwaAutoraById(id).toString().equals(session.getAttribute("username"))) {
+            try {
+                artykulRepository.deleteById(id);
 
-            redirectAttributes.addFlashAttribute("message", "The Article with id=" + id + " has been deleted successfully!");
-        } catch (Exception e) {
-            redirectAttributes.addFlashAttribute("message", e.getMessage());
+                redirectAttributes.addFlashAttribute("message", "The Article with id=" + id + " has been deleted successfully!");
+            } catch (Exception e) {
+                redirectAttributes.addFlashAttribute("message", e.getMessage());
+            }
+            //model.addAttribute("session", session);
         }
-        //model.addAttribute("session", session);
 
         return "redirect:/articles";
     }

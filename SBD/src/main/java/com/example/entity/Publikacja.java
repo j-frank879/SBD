@@ -5,7 +5,7 @@ import javax.persistence.Column;
 import javax.persistence.MappedSuperclass;
 
 @MappedSuperclass
-public abstract class Publikacja {
+public  class Publikacja {
     @Column
     private String nazwa;
     @Column

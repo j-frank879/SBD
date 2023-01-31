@@ -17,6 +17,7 @@ import java.util.List;
 import java.util.Random;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Controller;
@@ -39,10 +40,12 @@ public class UtworController
   @Autowired
   private UtworRepository utworRepository;
   private UtworFabryka fabrykaUtworow = new UtworFabryka();
+  
 
   @GetMapping("/utwory")
-  public String getAll(Model model, @Param("keyword") String keyword) {
+  public String getAll(HttpSession httpSession,Model model, @Param("keyword") String keyword) {
     try {
+      
       List<Publikacja> utwory = new ArrayList<Publikacja>();
 
       
@@ -66,7 +69,12 @@ public class UtworController
   }
 
   @GetMapping("/utwory/new")
-  public String addUtwor(Model model) throws MalformedURLException {
+  public String addUtwor(HttpSession httpSession,Model model) throws MalformedURLException {
+      
+        String username= (String) httpSession.getAttribute("username");
+        
+        if(username==null)
+            return "redirect:/login";
     Publikacja utwor = fabrykaUtworow.createPublikacja();
     
     
@@ -77,8 +85,10 @@ public class UtworController
   }
 
   @PostMapping("/utwory/save")
-  public String saveUtwor(Utwor utwor, RedirectAttributes redirectAttributes) {
+  public String saveUtwor(Utwor utwor,HttpSession httpSession, RedirectAttributes redirectAttributes) {
     try {
+        String username=(String) httpSession.getAttribute("username");
+      utwor.setnazwaAutora(username);
       utworRepository.save(utwor);
 
       redirectAttributes.addFlashAttribute("message", "Udalo sie dodac utwor! Brawo!");

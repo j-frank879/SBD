@@ -10,10 +10,10 @@
 		<version>2.7.5</version>
 		<relativePath /> <!-- lookup parent from repository -->
 	</parent>
-	<groupId>com.bezkoder</groupId>
-	<artifactId>spring-boot-thymeleaf-example</artifactId>
+	<groupId>Marek_Mierzwinski--Mateusz_Weclawski--Marcin_Korzunowicz--Joanna_Frankowska</groupId>
+	<artifactId>Serwis_Muzyczny</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>spring-boot-thymeleaf-example</name>
+	<name>Serwis Muzyczny</name>
 	<description>Spring Boot Thymeleaf example - CRUD with Bootstrap</description>
 	<properties>
 		<java.version>1.8</java.version>

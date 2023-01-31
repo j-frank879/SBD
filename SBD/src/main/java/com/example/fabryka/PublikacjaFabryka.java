@@ -5,6 +5,8 @@
 package com.example.fabryka;
 
 import com.example.entity.Publikacja;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
@@ -12,5 +14,8 @@ import com.example.entity.Publikacja;
  */
 public interface PublikacjaFabryka
 {
+
     Publikacja createPublikacja();
+    
+    
 }
