@@ -2,7 +2,11 @@ package com.example.controllers;
 
 import com.example.controllers.adapter.ArtykulAdapter;
 import com.example.entity.Artykul;
+import com.example.entity.Notification;
+import com.example.entity.UzytkSledz;
 import com.example.repository.ArtykulRepository;
+import com.example.repository.NotificationRepository;
+import com.example.repository.UzytkSledzRepository;
 import org.apache.tomcat.util.http.fileupload.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.repository.Query;
@@ -17,6 +21,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.ByteArrayInputStream;
+import java.io.Console;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -29,6 +34,10 @@ public class ArtykulController {
 
     @Autowired
     private ArtykulRepository artykulRepository;
+    @Autowired
+    private NotificationRepository notificationRepository;
+    @Autowired
+    private UzytkSledzRepository uzytkSledzRepository;
 
     @GetMapping("/")
     public String mainRedirect() {return "redirect:/articles";}
@@ -88,6 +97,8 @@ public class ArtykulController {
         model.addAttribute("artykul", new ArtykulAdapter(artykul));
         //model.addAttribute("session", session);
         artykulRepository.save(artykul);
+        SendNotifications(session.getAttribute("username").toString(), "Użytnik "+session.getAttribute("username").toString()+" wstawił artykuł.");
+        System.out.println(session.getAttribute("username").toString());
         System.out.println(artykul.getId() + " " + artykul.getNazwa() + " " + artykul.getContent());
         System.out.println("save called");
         return "redirect:/articles";
@@ -122,5 +133,14 @@ public class ArtykulController {
         artykulRepository.modifyState(id);
         //model.addAttribute("session", session);
         return "redirect:/articles";
+    }
+
+
+    public void SendNotifications(String sender, String text) {
+        List<UzytkSledz> subs = uzytkSledzRepository.findAllByuzytkownikSledzony(sender);
+        System.out.println(subs.size());
+        subs.forEach((sub) -> {
+            notificationRepository.save(new Notification(text,sender,sub.getNazwaUzytkownika()));
+        });
     }
 }

@@ -12,4 +12,13 @@ public class UzytkSledz {
     Long id;
     String nazwaUzytkownika;
     String uzytkownikSledzony;
+
+    public void setNazwaUzytkownika(String nazwaUzytkownika) {
+        this.nazwaUzytkownika = nazwaUzytkownika;
+    }
+    public void setUzytkownikSledzony(String uzytkownikSledzony) {
+        this.uzytkownikSledzony = uzytkownikSledzony;
+    }
+    public String getUzytkownikSledzony(){return uzytkownikSledzony;}
+    public String getNazwaUzytkownika(){return nazwaUzytkownika;}
 }

@@ -99,11 +99,26 @@
                 </div>
             </div>
         </div>
-        </div>
     </p>
 </p>
 
-
+<!--<table class="table table-hover table-responsive-xl">-->
+<!--    <thead class="thead-light">-->
+<!--    <tr>-->
+<!--        <th scope="col">Notifications</th>-->
+<!--    </tr>-->
+<!--    </thead>-->
+<!--    <tbody>-->
+<!--    <tr th:each="notification : ${notifications}">-->
+<!--        <td>[[${notification.tresc}]]</td>-->
+<!--        <td>-->
+<!--            &nbsp;-->
+<!--            <a th:href="@{'/notification/delete/' + ${notification.id}}" id="btnDeleteNotification"-->
+<!--               title="Delete this notification" class="fa-regular fa-trash-can icon-dark btn-delete-notification"></a>-->
+<!--        </td>-->
+<!--    </tr>-->
+<!--    </tbody>-->
+<!--</table>-->
 
 <script type="text/javascript">
     $(document).ready(function () {
@@ -116,7 +131,16 @@
         $("#confirmText").html("Do you want to delete the Article \<strong\>" + articlenazwa + "\<\/strong\>?");
         $("#confirmModal").modal();
       });
+      $(".btn-delete-notification").on("click", function (e) {
+        e.preventDefault();
+        link = $(this);
+
+
+        $("#yesBtn").attr("href", link.attr("href"));
+        $("#confirmText").html("Do you want to delete the Notification?");
+        $("#confirmModal").modal();
+      });
     });
-  </script>
+</script>
 </body>
 </html>
